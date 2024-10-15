@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8">
+    <title>Годинник і календар</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        input {
+            font-size: 20px;
+            width: 200px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body onLoad="clock()">
+    <form name="clock">
+        Час: <input type="text" name="time" size="20" value="" readonly><br><br>
+        Дата: <input type="text" name="date" size="20" value="" readonly>
+    </form>
+
+    <script language="JavaScript">
+        function clock() {
+            let now = new Date();
+            
+            // Форматування години, хвилин і секунд
+            let hours = now.getHours().toString().padStart(2, '0');
+            let minutes = now.getMinutes().toString().padStart(2, '0');
+            let seconds = now.getSeconds().toString().padStart(2, '0');
+            
+            // Форматування дати
+            let year = now.getFullYear();
+            let month = (now.getMonth() + 1).toString().padStart(2, '0'); // Місяці від 0 до 11
+            let date = now.getDate().toString().padStart(2, '0');
+            
+            // Оновлення полів форми
+            document.clock.time.value = `${hours}:${minutes}:${seconds}`;
+            document.clock.date.value = `${year}-${month}-${date}`;
+            
+            // Виклик функції знову через 1 секунду
+            setTimeout(clock, 1000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Методи Console</title>
+</head>
+<body>
+    <h1>Дослідження методів console в JavaScript</h1>
+    
+    <p>Відкрийте консоль браузера (F12) для перегляду результатів.</p>
+
+    <script>
+        // Завдання 4: Дослідження методу console.log()
+
+        // 1. Вивід остачі від ділення одного числа на інше
+        let num1 = 10;
+        let num2 = 3;
+        console.log("Остача від ділення", num1, "на", num2, "дорівнює:", num1 % num2);
+
+        // 2. Вивід логічного значення (true/false) перевірки рівності нулю остачі від ділення одного числа на інше
+        let isDivisible = (num1 % num2 === 0);
+        console.log("Чи ділиться", num1, "на", num2, "без остачі?", isDivisible);
+
+        // 3. Комбінований вивід тексту і значень деякого наперед заданого масиву
+        let arr = [1, 2, 3, 4, 5];
+        console.log("Перший елемент масиву: %d, другий елемент: %d, текстове представлення: %s", arr[0], arr[1], "Масив: " + arr);
+
+        // Завдання 5: Інші методи console
+
+        // 1. console.info()
+        console.info("Це інформаційне повідомлення");
+
+        // 2. console.warn()
+        console.warn("Це попередження");
+
+        // 3. console.error()
+        console.error("Це повідомлення про помилку");
+
+        // 4. console.dir()
+        let obj = { name: "John", age: 30 };
+        console.dir(obj);
+
+        // 5. console.dirxml()
+        let element = document.createElement('div');
+        element.innerHTML = "<p>Тестовий елемент</p>";
+        console.dirxml(element);
+
+        // 6. console.time() та console.timeEnd()
+        console.time("Таймер");
+        for (let i = 0; i < 1000000; i++) {
+            // Симуляція роботи коду
+        }
+        console.timeEnd("Таймер");
+
+        // 7. console.profile() та console.profileEnd()
+        console.profile("Мій профайл");
+        for (let i = 0; i < 100000; i++) {
+            // Симуляція важкої операції
+        }
+        console.profileEnd("Мій профайл");
+
+        // 8. console.assert()
+        let a = 5;
+        console.assert(a > 10, "Значення 'a' не більше 10");
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інформація про товар</title>
+    <script language="JavaScript">
+        let product = ["Зошит", "Ручка"]; // Масив назв товарів
+        let quantity = [105, 200]; // Масив кількості на складі
+        let cost = [26, 10.5]; // Масив вартості одиниці товару
+        let selectedProductIndex = -1; // Індекс обраного товару
+
+        // Функція для виведення кількості та вартості товару
+        function fun1() {
+            selectedProductIndex = document.form1.product_select.selectedIndex; // Отримуємо індекс вибраного товару
+            
+            if (selectedProductIndex !== -1) {
+                document.form1.output_quantity.value = "Наявна кількість: " + quantity[selectedProductIndex];
+                document.form1.output_cost.value = "Вартість за одиницю: " + cost[selectedProductIndex] + " грн";
+            }
+        }
+
+        // Функція для виведення загальної суми (кількість * вартість)
+        function fun2() {
+            if (selectedProductIndex !== -1) {
+                let totalCost = quantity[selectedProductIndex] * cost[selectedProductIndex]; // Розрахунок загальної суми
+                document.form1.output_total.value = "Загальна сума: " + totalCost + " грн";
+            } else {
+                document.form1.output_total.value = "Спочатку оберіть товар.";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Інформація про товар</h1>
+    <form name="form1">
+        Оберіть товар:
+        <select name="product_select">
+            <option value="0">Зошит</option>
+            <option value="1">Ручка</option>
+        </select>
+        <input type="button" value="Наявна кількість і вартість" onClick="fun1()">
+        <br><br>
+
+        <input type="text" size="70" name="output_quantity" placeholder="Наявна кількість">
+        <br><br>
+        <input type="text" size="70" name="output_cost" placeholder="Вартість за одиницю">
+        <br><br>
+
+        <input type="button" value="Загальна сума" onClick="fun2()">
+        <br><br>
+        <input type="text" size="70" name="output_total" placeholder="Загальна сума">
+    </form>
+</body>
+</html>

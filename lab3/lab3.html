@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Розрахунок площі еліпса та екранна клавіатура</title>
+    <style>
+        .keyboard {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 400px;
+        }
+        .keyboard button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        #textarea {
+            width: 100%;
+            height: 100px;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        #image-viewer {
+            margin-top: 20px;
+        }
+        #image-viewer img {
+            width: 300px;
+            height: 200px;
+            display: block;
+            margin: 0 auto;
+        }
+        .nav-buttons {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .nav-buttons button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        #quiz {
+            margin-top: 20px;
+        }
+        #quiz p {
+            font-size: 18px;
+        }
+        #result, #score {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+        #tree {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        #tree ul {
+            list-style: none;
+        }
+        #tree li {
+            cursor: pointer;
+        }
+        #tree ul ul {
+            display: none;
+        }
+    </style>
+    <script>
+        // Завдання 1: Розрахунок площі еліпса
+        function calculateEllipseArea() {
+            let a = parseFloat(document.getElementById('axisA').value);
+            let b = parseFloat(document.getElementById('axisB').value);
+            if (isNaN(a) || isNaN(b)) {
+                document.getElementById('result').textContent = "Будь ласка, введіть коректні числа!";
+                return;
+            }
+            let area = Math.PI * a * b;
+            document.getElementById('result').textContent = "Площа еліпса: " + area.toFixed(2) + " квадратних одиниць.";
+        }
+
+        // Завдання 2-3: Екранна клавіатура з перемиканням розкладки
+        const ukrLetters = ['а', 'б', 'в', 'г', 'д', 'е', 'є', 'и', 'і', 'ї', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ь', 'ю', 'я'];
+        const engLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+        const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+        let currentLayout = 'ukr'; // Поточна розкладка (починаємо з української)
+
+        function addCharacter(character) {
+            document.getElementById('textarea').value += character;
+        }
+
+        function clearTextarea() {
+            document.getElementById('textarea').value = '';
+        }
+
+        function toggleLayout() {
+            currentLayout = (currentLayout === 'ukr') ? 'eng' : 'ukr';
+            loadKeyboard();
+        }
+
+        function loadKeyboard() {
+            const keyboardContainer = document.getElementById('keyboard');
+            keyboardContainer.innerHTML = ''; // Очищаємо попередні кнопки
+
+            // Додаємо цифри
+            digits.forEach(digit => {
+                const button = document.createElement('button');
+                button.textContent = digit;
+                button.onclick = () => addCharacter(digit);
+                keyboardContainer.appendChild(button);
+            });
+
+            keyboardContainer.appendChild(document.createElement('br'));
+
+            // Додаємо літери відповідно до поточної розкладки
+            const letters = (currentLayout === 'ukr') ? ukrLetters : engLetters;
+            letters.forEach((letter, index) => {
+                const button = document.createElement('button');
+                button.textContent = letter;
+                button.onclick = () => addCharacter(letter);
+                keyboardContainer.appendChild(button);
+
+                if ((index + 1) % 10 === 0) {
+                    keyboardContainer.appendChild(document.createElement('br'));
+                }
+            });
+        }
+
+        window.onload = function() {
+            loadKeyboard();
+            loadImage();
+            generateQuestion(); // Завантажуємо перше арифметичне завдання
+            createTree(); // Створюємо дерево ієрархії
+        }
+
+        // Завдання 4: Перегляд зображень
+        const images = ['1.jpg', '2.jpg', '3.jpg']; // Масив шляхів до зображень
+        let currentImageIndex = 0;
+
+        function loadImage() {
+            const imageElement = document.getElementById('current-image');
+            imageElement.src = images[currentImageIndex];
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            loadImage();
+        }
+
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+            loadImage();
+        }
+
+        // Завдання 5: Арифметична перевірка
+        let correctAnswers = 0;
+        let totalQuestions = 0;
+
+        function generateRandomNumber() {
+            return Math.floor(Math.random() * 10);
+        }
+
+        function generateQuestion() {
+            const num1 = generateRandomNumber();
+            const num2 = generateRandomNumber();
+            const operations = ['+', '-', '*', '/'];
+            const operation = operations[Math.floor(Math.random() * operations.length)];
+            let correctAnswer;
+
+            if (operation === '/') {
+                correctAnswer = (num1 / num2).toFixed(2);
+            } else if (operation === '+') {
+                correctAnswer = num1 + num2;
+            } else if (operation === '-') {
+                correctAnswer = num1 - num2;
+            } else {
+                correctAnswer = num1 * num2;
+            }
+
+            document.getElementById('question').textContent = `${num1} ${operation} ${num2} = ?`;
+            document.getElementById('question').dataset.correctAnswer = correctAnswer;
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('answer').value;
+            const correctAnswer = document.getElementById('question').dataset.correctAnswer;
+
+            totalQuestions++;
+            if (parseFloat(userAnswer) === parseFloat(correctAnswer)) {
+                correctAnswers++;
+                document.getElementById('result').textContent = "Правильно!";
+            } else {
+                document.getElementById('result').textContent = `Помилка, правильна відповідь: ${correctAnswer}`;
+            }
+
+            document.getElementById('score').textContent = `Загальний рахунок: ${(correctAnswers / totalQuestions * 100).toFixed(0)}% (${correctAnswers} правильних відповідей з ${totalQuestions})`;
+        }
+
+        // Завдання 6: Створення дерева ієрархії
+        function createTree() {
+            const tree = document.getElementById('tree');
+
+            tree.addEventListener('click', function(event) {
+                const target = event.target;
+
+                if (target.tagName === 'LI') {
+                    const childUl = target.querySelector('ul');
+                    if (childUl) {
+                        childUl.style.display = (childUl.style.display === 'none' || childUl.style.display === '') ? 'block' : 'none';
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Розрахунок площі еліпса та екранна клавіатура</h1>
+
+    <!-- Завдання 1: Розрахунок площі еліпса -->
+    <h2>Розрахунок площі еліпса</h2>
+    <label for="axisA">Введіть довжину великої півосі (a):</label>
+    <input type="text" id="axisA" oninput="calculateEllipseArea()" placeholder="Введіть значення a"><br><br>
+
+    <label for="axisB">Введіть довжину малої півосі (b):</label>
+    <input type="text" id="axisB" oninput="calculateEllipseArea()" placeholder="Введіть значення b"><br><br>
+
+    <p id="result">Площа еліпса буде виведена тут.</p>
+
+    <h1>Екранна клавіатура, перемикання розкладки, перегляд зображень, арифметика та дерево ієрархії</h1>
+
+    <!-- Текстове поле для введення тексту -->
+    <textarea id="textarea" placeholder="Текст буде з'являтися тут..."></textarea><br>
+
+    <!-- Клавіатура -->
+    <div id="keyboard" class="keyboard"></div><br>
+
+    <!-- Кнопки -->
+    <button onclick="clearTextarea()">Очистити поле</button>
+    <button onclick="toggleLayout()">Alt+Shift (Перемикання розкладки)</button>
+
+    <!-- Завдання 4: Перегляд зображень -->
+    <div id="image-viewer">
+        <img id="current-image" src="1.jpg" alt="Зображення">
+    </div>
+    <div class="nav-buttons">
+        <button onclick="prevImage()">Назад</button>
+        <button onclick="nextImage()">Вперед</button>
+    </div>
+
+    <!-- Завдання 5: Арифметична перевірка -->
+    <div id="quiz">
+        <p id="question" data-correct-answer=""></p>
+        <input type="text" id="answer" placeholder="Введіть відповідь">
+        <button onclick="checkAnswer()">Перевірити</button>
+        <button onclick="generateQuestion()">Наступне завдання</button>
+        <p id="result"></p>
+        <p id="score"></p>
+    </div>
+
+    <!-- Завдання 6: Дерево ієрархії -->
+    <div id="tree">
+        <ul>
+            <li>fruits
+                <ul>
+                    <li>apple</li>
+                    <li>pineapple</li>
+                    <li>apricot</li>
+                    <li>pear</li>
+                    <li>lemon</li>
+                </ul>
+            </li>
+            <li>vegetables
+                <ul>
+                    <li>potatoes</li>
+                    <li>beetroot</li>
+                    <li>carrots</li>
+                    <li>pear</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

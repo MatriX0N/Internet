@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інформація про студента</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .student-info {
+            margin-top: 20px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .input-fields {
+            margin-top: 20px;
+        }
+        .input-fields input {
+            margin: 5px;
+        }
+        .form-fields {
+            margin-top: 20px;
+        }
+        .form-fields input {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Інформація про студента</h1>
+    
+    <div class="student-info">
+        <p id="student-name"></p>
+    </div>
+    
+    <h2>Завдання 2: Обчислити формулу F = x + y^2 + z^0.5</h2>
+    
+    <div class="input-fields">
+        <label for="x">x:</label>
+        <input type="number" id="x" placeholder="Введіть x">
+        <br>
+        <label for="y">y:</label>
+        <input type="number" id="y" placeholder="Введіть y">
+        <br>
+        <label for="z">z:</label>
+        <input type="number" id="z" placeholder="Введіть z">
+    </div>
+    
+    <p id="result"></p>
+
+    <button onclick="showStudentDetails()">Дізнатися дату та місце народження</button>
+    <button onclick="calculateF()">Обчислити F (Завдання 2)</button>
+
+    <h2>Завдання 3: Обробка подій onFocus і onChange</h2>
+    <div class="form-fields">
+        <label for="first-field">Перше поле:</label>
+        <input type="text" id="first-field" placeholder="Введіть текст" onfocus="handleFocus()" onchange="handleChange()">
+        <br>
+        <label for="second-field">Друге поле:</label>
+        <input type="text" id="second-field" readonly placeholder="Тут буде відображено реакцію">
+    </div>
+
+    <h2>Завдання 4: Обчислити формулу F згідно з розгалуженим процесом</h2>
+    <div class="input-fields">
+        <label for="x4">x:</label>
+        <input type="number" id="x4" placeholder="Введіть x">
+        <br>
+        <label for="y4">y:</label>
+        <input type="number" id="y4" placeholder="Введіть y">
+    </div>
+    
+    <p id="result4"></p>
+
+    <button onclick="calculateF4()">Обчислити F (Завдання 4)</button>
+
+    <h2>Завдання 5: Обчислити суму ряду</h2>
+    <div class="input-fields">
+        <label for="x5">x:</label>
+        <input type="number" id="x5" placeholder="Введіть x">
+        <br>
+        <label for="y5">y:</label>
+        <input type="number" id="y5" placeholder="Введіть y">
+    </div>
+    
+    <p id="result5"></p>
+
+    <button onclick="calculateSum()">Обчислити суму (Завдання 5)</button>
+
+    <script>
+        const studentSurname = "Шлягор";
+        const studentName = "Станіслав";
+        const studentPatronymic = "Васильович";
+        
+        document.getElementById('student-name').innerHTML = `Прізвище: ${studentSurname}, Ім'я: ${studentName}, По батькові: ${studentPatronymic}`;
+
+        function showStudentDetails() {
+            alert("Дата народження: 20 червня 2005 р.\nМісце народження: Коломия, Україна");
+        }
+
+        function calculateF() {
+            const x = parseFloat(document.getElementById('x').value);
+            const y = parseFloat(document.getElementById('y').value);
+            const z = parseFloat(document.getElementById('z').value);
+
+            if (isNaN(x) || isNaN(y) || isNaN(z)) {
+                alert('Будь ласка, введіть всі значення для x, y, і z');
+                return;
+            }
+
+            const F = x + Math.pow(y, 2) + Math.sqrt(z);
+            document.getElementById('result').innerHTML = `Результат F: ${F}`;
+        }
+
+        function handleFocus() {
+            document.getElementById('second-field').value = "Перше поле в фокусі";
+        }
+
+        function handleChange() {
+            const firstFieldValue = document.getElementById('first-field').value;
+            document.getElementById('second-field').value = `Введено текст: ${firstFieldValue}`;
+        }
+
+        // Завдання 4 - обчислення F згідно з варіантом
+        function calculateF4() {
+            const x = parseFloat(document.getElementById('x4').value);
+            const y = parseFloat(document.getElementById('y4').value);
+
+            if (isNaN(x) || isNaN(y)) {
+                alert('Будь ласка, введіть всі значення для x і y');
+                return;
+            }
+
+            let F;
+
+            if (x - 3 * y !== 2) {
+                F = x - 2 * Math.pow(y, 2);
+            } else if (x > 0) {
+                F = x - y / y;
+            } else {
+                F = 2 * Math.pow(x, 2) - 3 * y;
+            }
+
+            document.getElementById('result4').innerHTML = `Результат F: ${F}`;
+        }
+
+        // Завдання 5 - обчислення суми ряду
+        function calculateSum() {
+            const x = parseFloat(document.getElementById('x5').value);
+            const y = parseFloat(document.getElementById('y5').value);
+
+            if (isNaN(x) || isNaN(y) || x === 0) {
+                alert('Будь ласка, введіть коректні значення для x і y (x не повинен дорівнювати нулю)');
+                return;
+            }
+
+            let sum = 0;
+
+            for (let i = 2; i <= 4; i++) {
+                const factorial = (n) => {
+                    return n === 0 ? 1 : n * factorial(n - 1);
+                };
+
+                const term = (Math.pow(-1, i + 1) * (-x + x * Math.pow(y, 2))) / (2 * x * factorial(i));
+                sum += term;
+            }
+
+            document.getElementById('result5').innerHTML = `Сума ряду: ${sum}`;
+        }
+
+    </script>
+
+</body>
+</html>
